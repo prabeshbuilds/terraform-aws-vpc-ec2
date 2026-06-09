@@ -1,19 +1,28 @@
-variable "region" {
-  description = "AWS region"
-  default     = "us-east-1"
+variable "aws_region"{
+  default = "us-east-1"
+}
+
+variable "vpc_cidr" {
+  default = "10.0.0.0/16"
+}
+
+variable "public_subnet_cidr" {
+  default = "10.0.1.0/24"
+}
+
+variable "private_subnet_cidr" {
+  default = "10.0.2.0/24"
+}
+
+variable "az"{
+  default = "us-east-1a"
 }
 
 variable "ami_id" {
-  description = "Canonical, Ubuntu, 24.04, amd64 noble image"
-  default     = "ami-05cf1e9f73fbad2e2"
+  default = "ami-0c94855ba95c71c99" # Amazon Linux 2 AMI (HVM), SSD Volume Type
 }
 
 variable "instance_type" {
-  description = "EC2 type"
-  default     = "t2.micro"
+  default = "t2.micro"
 }
 
-variable "vpc_id" {
-  description = "Existing VPC ID (default VPC or custom)"
-  default     = "vpc-0a90dabe70eb3e866"
-}
