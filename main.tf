@@ -69,7 +69,39 @@ resource "aws_instance" "my_instance" {
   instance_type          = var.instance_type
   key_name               = var.key_name
   vpc_security_group_ids = [aws_security_group.ec2_sg.id]
+  
+ user_data = <<-EOF
+              #!/bin/bash
 
+              # Update system packages
+              yum update -y
+
+              # Install Docker
+              yum install docker -y
+
+              # Start Docker service
+              systemctl start docker
+              systemctl enable docker
+
+              # Add ec2-user to docker group
+              usermod -aG docker ec2-user
+
+              # Pull Nginx Docker image
+              docker pull nginx
+
+              # Create custom nginx webpage
+              mkdir -p /home/ec2-user/nginx-content
+
+              echo "Hello from Terraform AWS Docker Nginx Project" > /home/ec2-user/nginx-content/index.html
+
+              # Run Nginx container
+              docker run -d \
+              --name nginx-server \
+              -p 80:80 \
+              -v /home/ec2-user/nginx-content:/usr/share/nginx/html \
+              nginx
+
+              EOF
   tags = {
     Name = "terraform-ec2-instance"
   }
